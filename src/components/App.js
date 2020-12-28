@@ -65,11 +65,21 @@ function App() {
     // setSelectedValue(null);
     console.log("The Selected Value at start of getData is: " + String(selectedValue));
     
+    // Add some local variables to hold the revenue values by company
+    let amRevenueValue = 0;
+    let ebRevenueValue = 0;
+    let etRevenueValue = 0;
+
     for (let i = 0; i < arrLen; i++) {
       if (arg === arr[i]["month"]) {
         console.log("This is the current month: " + arg);
-        if (arr[i]["source"] === "AM") {
-          setAmRevenue(parseInt(arr[i].revenue));
+        if (arr[i]["source"] === "AM") {          
+
+          // store the amRevenue value locally for use to calculate totalRevenue
+          amRevenueValue = parseInt(arr[i].revenue)
+          // set the state
+          setAmRevenue(amRevenueValue);
+
           console.log("This is the revenue from Amazon: " + arr[i].revenue);
           ordersTrendStore.push({
             label: "Amazon",
@@ -78,14 +88,24 @@ function App() {
           });
         }
         else if (arr[i]["source"] === "EB") {
-          setEbRevenue(parseInt(arr[i].revenue));
+
+          // store the ebRevenue value locally for use to calculate totalRevenue
+          ebRevenueValue = parseInt(arr[i].revenue)
+          // set the state
+          setEbRevenue(ebRevenueValue);
+
           ordersTrendStore.push({
             label: "Ebay",
             value: arr[i].orders,
             displayValue: `${arr[i].orders} orders`
           });
         } else if (arr[i]["source"] === "ET") {
-          setEtRevenue(parseInt(arr[i].revenue));
+
+          // store the etRevenue value locally for use to calculate totalRevenue
+          etRevenueValue = parseInt(arr[i].revenue)
+          // set the state
+          setEtRevenue(etRevenueValue);
+
           ordersTrendStore.push({
             label: "Etsy",
             value: arr[i].orders,
@@ -130,7 +150,10 @@ function App() {
     }
 
     // totalRevenue = parseInt(amRevenue + ebRevenue + etRevenue);
-    setTotalRevenue(parseInt(amRevenue + ebRevenue + etRevenue));
+
+    // use the local variables to calculate totalRevenue - we can't count on the state versions to havve been updated within this closure
+    setTotalRevenue(parseInt(amRevenueValue + ebRevenueValue + etRevenueValue));
+
     // setTotalRevenue(parseInt(amRevenue));
     console.log("This should be the total Revenue: " + totalRevenue);
     // ordersTrendRegion.push({
